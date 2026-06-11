@@ -1,0 +1,31 @@
+{% extends 'booking/base.html' %}
+
+{% block title %}Booking Confirmed | Barb Barbershop{% endblock %}
+
+{% block content %}
+<section class="section booking-hero">
+  <div class="container">
+    <p class="eyebrow">Booking received</p>
+    <h1>Thanks, {{ booking.name }}!</h1>
+    <p class="hero-text">Your booking request has been sent. A confirmation email has been sent to {{ booking.email }}, and our shop has been notified.</p>
+  </div>
+</section>
+
+<section class="section booking-form-section">
+  <div class="container booking-grid">
+    <div class="booking-copy">
+      <h2>Booking details</h2>
+      <ul class="about-list">
+        <li><strong>Service:</strong> {{ booking.service }}</li>
+        <li><strong>Preferred date / time:</strong> {{ booking.preferred_datetime }}</li>
+        <li><strong>Phone:</strong> {{ booking.phone }}</li>
+        <li><strong>Email:</strong> {{ booking.email }}</li>
+      </ul>
+      {% if booking.message %}
+      <p><strong>Notes:</strong> {{ booking.message }}</p>
+      {% endif %}
+      <a href="{% url 'home' %}" class="button">Return to Home</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
