@@ -133,9 +133,15 @@ EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.conso
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'Barb Barbershop <matildahnyaboke@gmail.com>')
 SHOP_BOOKING_EMAIL = os.environ.get('SHOP_BOOKING_EMAIL', 'matildahnyaboke@gmail.com')
 
-if 'anymail.backends' in EMAIL_BACKEND:
-    INSTALLED_APPS += ['anymail']
-    ANYMAIL = {
-        'MAILJET_API_KEY': os.environ.get('MAILJET_API_KEY'),
-        'MAILJET_SECRET_KEY': os.environ.get('MAILJET_SECRET_KEY'),
-    }
+if EMAIL_BACKEND.startswith('anymail.backends'):
+    try:
+        import anymail  # noqa: F401
+        INSTALLED_APPS += ['anymail']
+        ANYMAIL = {
+            'MAILJET_API_KEY': os.environ.get('MAILJET_API_KEY'),
+            'MAILJET_SECRET_KEY': os.environ.get('MAILJET_SECRET_KEY'),
+        }
+    except ImportError:
+        EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+        # anymail not installed, so fallback to console backend
+
