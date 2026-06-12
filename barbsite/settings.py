@@ -32,7 +32,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-_jpj!)mwn&0n-#rk@4ty81vn1eweb6&uxomn+9d7j=6-(w3gnz')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ['*']
 
@@ -89,16 +89,21 @@ DEFAULT_SQLITE_PATH = BASE_DIR / 'db.sqlite3'
 VERCEL_SQLITE_PATH = Path('/tmp/db.sqlite3')
 
 database_path = Path(os.environ.get('SQLITE_PATH', DEFAULT_SQLITE_PATH))
-if os.environ.get('VERCEL') or os.environ.get('VERCEL_ENV'):
+if os.environ.get('VERCEL') or os.environ.get('VERCEL_ENV') or os.environ.get('VERCEL_URL'):
     database_path = VERCEL_SQLITE_PATH
 else:
-    try:
-        database_path.parent.mkdir(parents=True, exist_ok=True)
-        database_path.touch(exist_ok=True)
-        with open(database_path, 'a'):
-            pass
-    except OSError:
+    if not database_path.parent.exists() or not os.access(database_path.parent, os.W_OK):
         database_path = VERCEL_SQLITE_PATH
+    elif database_path.exists() and not os.access(database_path, os.W_OK):
+        database_path = VERCEL_SQLITE_PATH
+    else:
+        try:
+            database_path.parent.mkdir(parents=True, exist_ok=True)
+            database_path.touch(exist_ok=True)
+            with open(database_path, 'a'):
+                pass
+        except OSError:
+            database_path = VERCEL_SQLITE_PATH
 
 DATABASES = {
     'default': {
