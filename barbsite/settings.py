@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 import os
+import tempfile
 from pathlib import Path
 
 # Load environment variables from a project root .env file when available.
@@ -88,22 +89,40 @@ WSGI_APPLICATION = 'barbsite.wsgi.application'
 DEFAULT_SQLITE_PATH = BASE_DIR / 'db.sqlite3'
 VERCEL_SQLITE_PATH = Path('/tmp/db.sqlite3')
 
-database_path = Path(os.environ.get('SQLITE_PATH', DEFAULT_SQLITE_PATH))
-if os.environ.get('VERCEL') or os.environ.get('VERCEL_ENV') or os.environ.get('VERCEL_URL'):
+
+def _dir_writable(path: Path) -> bool:
+    try:
+        path.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryFile(dir=str(path)):
+            pass
+        return True
+    except OSError:
+        return False
+
+
+def _resolve_database_path() -> Path:
+    sqlite_path = os.environ.get('SQLITE_PATH')
+    if sqlite_path:
+        return Path(sqlite_path)
+
+    if os.environ.get('VERCEL') or os.environ.get('VERCEL_ENV') or os.environ.get('VERCEL_URL'):
+        return VERCEL_SQLITE_PATH
+
+    if not _dir_writable(DEFAULT_SQLITE_PATH.parent):
+        return VERCEL_SQLITE_PATH
+
+    if DEFAULT_SQLITE_PATH.exists() and not os.access(DEFAULT_SQLITE_PATH, os.W_OK):
+        return VERCEL_SQLITE_PATH
+
+    return DEFAULT_SQLITE_PATH
+
+
+database_path = _resolve_database_path()
+try:
+    database_path.parent.mkdir(parents=True, exist_ok=True)
+    database_path.touch(exist_ok=True)
+except OSError:
     database_path = VERCEL_SQLITE_PATH
-else:
-    if not database_path.parent.exists() or not os.access(database_path.parent, os.W_OK):
-        database_path = VERCEL_SQLITE_PATH
-    elif database_path.exists() and not os.access(database_path, os.W_OK):
-        database_path = VERCEL_SQLITE_PATH
-    else:
-        try:
-            database_path.parent.mkdir(parents=True, exist_ok=True)
-            database_path.touch(exist_ok=True)
-            with open(database_path, 'a'):
-                pass
-        except OSError:
-            database_path = VERCEL_SQLITE_PATH
 
 DATABASES = {
     'default': {
