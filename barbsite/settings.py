@@ -88,15 +88,22 @@ WSGI_APPLICATION = 'barbsite.wsgi.application'
 DEFAULT_SQLITE_PATH = BASE_DIR / 'db.sqlite3'
 VERCEL_SQLITE_PATH = Path('/tmp/db.sqlite3')
 
+database_path = Path(os.environ.get('SQLITE_PATH', DEFAULT_SQLITE_PATH))
 if os.environ.get('VERCEL') or os.environ.get('VERCEL_ENV'):
     database_path = VERCEL_SQLITE_PATH
 else:
-    database_path = Path(os.environ.get('SQLITE_PATH', DEFAULT_SQLITE_PATH))
+    try:
+        database_path.parent.mkdir(parents=True, exist_ok=True)
+        database_path.touch(exist_ok=True)
+        with open(database_path, 'a'):
+            pass
+    except OSError:
+        database_path = VERCEL_SQLITE_PATH
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': database_path,
+        'NAME': str(database_path),
     }
 }
 
