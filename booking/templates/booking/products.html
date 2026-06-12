@@ -1,0 +1,33 @@
+{% extends 'booking/base.html' %}
+
+{% block title %}Products | Barb Barbershop{% endblock %}
+
+{% block content %}
+<section class="section products" id="products">
+  <div class="container">
+    <h2 class="section-title">Our Products</h2>
+    <div class="product-grid">
+      <article class="product-card">
+        <img src="/static/Images/Shampoo.jpg" alt="Shampoo product" />
+        <h3>Shampoo</h3>
+        <p>Gentle cleansing formula designed for every hair type.</p>
+      </article>
+      <article class="product-card">
+        <img src="/static/Images/conditioner.jpg" alt="Conditioner product" />
+        <h3>Conditioner</h3>
+        <p>Rich hydration for softer hair that stays manageable all day.</p>
+      </article>
+      <article class="product-card">
+        <img src="/static/Images/Body oil.jpg" alt="Beard oil product" />
+        <h3>Beard Oil</h3>
+        <p>Lightweight oil that softens, shines, and tames your beard.</p>
+      </article>
+      <article class="product-card">
+        <img src="/static/Images/Pomade.jpg" alt="Pomade product" />
+        <h3>Pomade</h3>
+        <p>High-hold styling product for texture, shine, and long-lasting control.</p>
+      </article>
+    </div>
+  </div>
+</section>
+{% endblock %}
