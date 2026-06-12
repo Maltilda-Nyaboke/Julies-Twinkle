@@ -82,10 +82,21 @@ WSGI_APPLICATION = 'barbsite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+# Database
+# In local development we use BASE_DIR/db.sqlite3.
+# On Vercel / other serverless hosts, use /tmp/db.sqlite3 because the app directory is not writable.
+DEFAULT_SQLITE_PATH = BASE_DIR / 'db.sqlite3'
+VERCEL_SQLITE_PATH = Path('/tmp/db.sqlite3')
+
+if os.environ.get('VERCEL') or os.environ.get('VERCEL_ENV'):
+    database_path = VERCEL_SQLITE_PATH
+else:
+    database_path = Path(os.environ.get('SQLITE_PATH', DEFAULT_SQLITE_PATH))
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': database_path,
     }
 }
 
