@@ -1,10 +1,5 @@
 {
   "version": 2,
-  "functions": {
-    "barbsite/wsgi.py": {
-      "includeFiles": "booking/templates/** static/**"
-    }
-  },
   "routes": [
     { "src": "/(.*)", "dest": "barbsite/wsgi.py" }
   ]
