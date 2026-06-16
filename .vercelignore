@@ -1,0 +1,8 @@
+app.py
+booking.html
+products.html
+*.pyc
+__pycache__/
+venv/
+source/
+staticfiles/

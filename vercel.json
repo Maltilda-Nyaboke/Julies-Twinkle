@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "barbsite/wsgi.py", "use": "@vercel/python" }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "barbsite/wsgi.py" }
+  ]
+}
