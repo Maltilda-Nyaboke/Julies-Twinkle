@@ -1,17 +1,13 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "barbsite/wsgi.py",
-      "use": "@vercel/python",
-      "config": {
-        "includeFiles": [
-          "booking/templates/**",
-          "static/**"
-        ]
-      }
+  "functions": {
+    "barbsite/wsgi.py": {
+      "includeFiles": [
+        "booking/templates/**",
+        "static/**"
+      ]
     }
-  ],
+  },
   "routes": [
     { "src": "/static/(.*)", "dest": "/static/$1" },
     { "src": "/(.*)", "dest": "barbsite/wsgi.py" }
