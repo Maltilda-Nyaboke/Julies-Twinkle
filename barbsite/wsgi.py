@@ -13,6 +13,11 @@ from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'barbsite.settings')
 
+# get_wsgi_application() calls django.setup(), which populates the app
+# registry. It must run before call_command(), otherwise management
+# commands fail with AppRegistryNotReady.
+application = get_wsgi_application()
+
 # On Vercel, the app runs in a serverless environment and the SQLite database
 # may need to be initialized on cold start. Running migrations here ensures the
 # booking table exists before any POST request attempts to write to it.
@@ -23,6 +28,5 @@ if os.environ.get('VERCEL') or os.environ.get('VERCEL_ENV') or os.environ.get('V
         call_command('migrate', '--noinput')
         call_command('collectstatic', '--noinput')
     except Exception:
-        pass
-
-application = get_wsgi_application()
+        import traceback
+        traceback.print_exc()
