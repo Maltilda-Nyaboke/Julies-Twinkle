@@ -10,7 +10,12 @@
       }
     }
   ],
+  "env": {
+    "PYTHON_VERSION": "3.11"
+  },
+  "buildCommand": "./build.sh",
   "routes": [
+    { "src": "/static/(.*)", "dest": "/static/$1", "headers": { "Cache-Control": "max-age=31536000" } },
     { "src": "/(.*)", "dest": "barbsite/wsgi.py" }
   ]
 }
