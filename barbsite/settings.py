@@ -172,11 +172,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
-# Use /tmp on Vercel for collecting static files (since app directory is not writable)
-if os.environ.get('VERCEL'):
-    STATIC_ROOT = Path('/tmp/staticfiles')
-else:
-    STATIC_ROOT = BASE_DIR / 'staticfiles'
+# Set static root for production/Vercel
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # WhiteNoise configuration for serving static files
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
