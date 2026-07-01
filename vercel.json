@@ -1,0 +1,7 @@
+{
+  "buildCommand": "bash build.sh && mkdir -p public && cp -r staticfiles/* public/ 2>/dev/null || true",
+  "outputDirectory": "public",
+  "env": {
+    "PYTHONUNBUFFERED": "1"
+  }
+}
