@@ -68,10 +68,7 @@ ROOT_URLCONF = 'barbsite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            BASE_DIR / 'booking' / 'templates',
-            os.path.join(BASE_DIR, 'booking', 'templates'),
-        ],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
