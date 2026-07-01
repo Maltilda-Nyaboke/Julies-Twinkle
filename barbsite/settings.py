@@ -181,8 +181,8 @@ if os.environ.get('VERCEL') or os.environ.get('VERCEL_ENV') or os.environ.get('V
 else:
     STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# WhiteNoise configuration for serving static files
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+# Use default storage - WhiteNoise middleware will serve these
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
