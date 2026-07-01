@@ -175,10 +175,14 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Set static root for production/Vercel
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+# On Vercel, use /tmp because the app directory is not writable
+if os.environ.get('VERCEL') or os.environ.get('VERCEL_ENV') or os.environ.get('VERCEL_URL'):
+    STATIC_ROOT = Path('/tmp/staticfiles')
+else:
+    STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # WhiteNoise configuration for serving static files
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.WhiteNoiseStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
