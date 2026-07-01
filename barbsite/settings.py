@@ -36,7 +36,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-_jpj!)mwn&0n-#rk@4ty8
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 # Allow all vercel.app domains and localhost
-_default_hosts = ['localhost', '127.0.0.1', 'julies-twinkle.vercel.app', 'julies-twinkle-5hthmndtv-maltildanyabokes-projects.vercel.app']
+_default_hosts = ['localhost', '127.0.0.1', 'julies-twinkle.vercel.app', 'julies-twinkle-bsl6j0pah-maltildanyabokes-projects.vercel.app', '*.vercel.app']
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', ','.join(_default_hosts)).split(',')
 
 
@@ -179,7 +179,7 @@ else:
     STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # WhiteNoise configuration for serving static files
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
